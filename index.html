@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<p>
+<p> C distribution
 	<div id ="mapC"></div>
 	<script>
         var mapwidth = 960, mapheight = 700;
@@ -26,14 +26,13 @@
         		 .style("fill", "#ccc")
         		 .style("stroke", "#888");
         	});
-        });
 
-        d3.csv("C_2014_latlong.csv", function(error, csvdata){
-        	if(error){
-        		console.log(error);
-        	}
-        	
-        	for(var i = 0; i < csvdata.length; i++){
+             d3.csv("C_2014_latlong.csv", function(error, csvdata){
+            if(error){
+                console.log(error);
+            }
+            
+            for(var i = 0; i < csvdata.length; i++){
                 var lon = csvdata[i].longitude;
                 var lat = csvdata[i].latitude;
                 if(lat == "" || lon == ""){
@@ -45,10 +44,108 @@
                 gMapC.append("circle").attr("cx", coordiantes[0])
                     .attr("cy", coordiantes[1])
                     .attr("r", 10)
-                    .style("fill", "#2EFE64");
+                    .style("fill", "#0101DF")
+                    .style("opacity", 0.5);
             }
         });
+    });
+
+       
 	</script>
+</p>
+
+<p> Java distribution
+    <div id ="mapJava"></div>
+    <script>
+        var mapwidth = 960, mapheight = 700;
+        var projection = d3.geo.equirectangular();
+        var path = d3.geo.path().projection(projection);
+        var svgMapJava = d3.select("#mapJava").append("svg")
+                      .attr("width", mapwidth).attr("height", mapheight);
+        var gMapJava = svgMapJava.append("g");
+        var worldObjectJava;
+        d3.json("world-50m.json", function(error, world){
+            worldObjectJava = world;
+            if(error){console.log(error);}
+
+            var countries = topojson.feature(world, world.objects.countries).features;
+            countries.forEach(function(country){
+                gMapJava.append("path").attr("d", path(country))
+                 .style("fill", "#ccc")
+                 .style("stroke", "#888");
+            });
+
+            d3.csv("Java_2014_latlong.csv", function(error, csvdata){
+            if(error){
+                console.log(error);
+            }
+            
+            for(var i = 0; i < csvdata.length; i++){
+                var lon = csvdata[i].longitude;
+                var lat = csvdata[i].latitude;
+                if(lat == "" || lon == ""){
+                    continue;
+                }
+                var lon_number = parseFloat(lon);
+                var lat_number = parseFloat(lat);
+                var coordiantes1 = projection([lon_number, lat_number]);
+                gMapJava.append("circle").attr("cx", coordiantes1[0])
+                    .attr("cy", coordiantes1[1])
+                    .attr("r", 10)
+                    .style("fill", "#0101DF")
+                    .style("opacity", 0.5);
+            }
+        });
+    });
+
+       
+    </script>
+</p>
+    <div id ="mapJS"></div>
+    <script>
+        var mapwidth = 960, mapheight = 700;
+        var projection = d3.geo.equirectangular();
+        var path = d3.geo.path().projection(projection);
+        var svgMapJS = d3.select("#mapJS").append("svg")
+                      .attr("width", mapwidth).attr("height", mapheight);
+        var gMapJS = svgMapJS.append("g");
+        var worldObjectJS;
+        d3.json("world-50m.json", function(error, world){
+            worldObjectJS = world;
+            if(error){console.log(error);}
+
+            var countries = topojson.feature(world, world.objects.countries).features;
+            countries.forEach(function(country){
+                gMapJS.append("path").attr("d", path(country))
+                 .style("fill", "#ccc")
+                 .style("stroke", "#888");
+            });
+            d3.csv("JS_2014_latlong.csv", function(error, csvdata){
+            if(error){
+                console.log(error);
+            }
+            
+            for(var i = 0; i < csvdata.length; i++){
+                var lon = csvdata[i].longitude;
+                var lat = csvdata[i].latitude;
+                if(lat == "" || lon == ""){
+                    continue;
+                }
+                var lon_number = parseFloat(lon);
+                var lat_number = parseFloat(lat);
+                var coordiantes2 = projection([lon_number, lat_number]);
+                gMapJS.append("circle").attr("cx", coordiantes2[0])
+                    .attr("cy", coordiantes2[1])
+                    .attr("r", 10)
+                    .style("fill", "#0101DF")
+                    .style("opacity", 0.5);
+            }
+        });
+    });
+
+        
+    </script>
+<p>
 
 </p>
 </body>
