@@ -1,0 +1,55 @@
+<html>
+<head>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+</head>
+
+<body>
+<p>
+	<div id ="mapC"></div>
+	<script>
+        var mapwidth = 960, mapheight = 700;
+        var projection = d3.geo.equirectangular();
+        var path = d3.geo.path().projection(projection);
+        var svgMapC = d3.select("#mapC").append("svg")
+                      .attr("width", mapwidth).attr("height", mapheight);
+        var gMapC = svgMapC.append("g");
+        var worldObjectC;
+        d3.json("world-50m.json", function(error, world){
+        	worldObjectC = world;
+        	if(error){console.log(error);}
+
+        	var countries = topojson.feature(world, world.objects.countries).features;
+        	countries.forEach(function(country){
+        		gMapC.append("path").attr("d", path(country))
+        		 .style("fill", "#ccc")
+        		 .style("stroke", "#888");
+        	});
+        });
+
+        d3.csv("C_2014_latlong.csv", function(error, csvdata){
+        	if(error){
+        		console.log(error);
+        	}
+        	
+        	for(var i = 0; i < csvdata.length; i++){
+                var lon = csvdata[i].longitude;
+                var lat = csvdata[i].latitude;
+                if(lat == "" || lon == ""){
+                    continue;
+                }
+                var lon_number = parseFloat(lon);
+                var lat_number = parseFloat(lat);
+                var coordiantes = projection([lon_number, lat_number]);
+                gMapC.append("circle").attr("cx", coordiantes[0])
+                    .attr("cy", coordiantes[1])
+                    .attr("r", 10)
+                    .style("fill", "#2EFE64");
+            }
+        });
+	</script>
+
+</p>
+</body>
+</html>
