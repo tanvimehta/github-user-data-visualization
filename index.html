@@ -1,103 +1,349 @@
 <html>
 <head>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+<style>
+/* put a border around the svg element so we can see the coordinate system better. */
+body { font-family: "Lato"; 
+text-align:center;
+margin:20 auto;
+font-weight: 300;
+background-color: #F5F5F5;
+}
+
+.axis{stroke-width:1px;}
+
+h1{font-weight:700;
+  font-size: 16pt;
+  margin-bottom: 5pt;
+}
+
+div { margin: 40px; }
+
+path{
+   stroke-width:2;
+   fill:transparent;
+   stroke:#666;
+}
+
+.tick{
+  font-size: 10pt;
+  font-weight:400;
+}
+
+
+#canvas{
+  width:1000px;
+  margin: 0 auto;
+  background-color:#FFFAFA;
+}
+
+p {
+  width:800px;
+  margin: 20px auto;
+}
+
+</style>
 </head>
 
 <body>
-<h1> Project 1 - Programming Language Popularity </h1>
-<p> C distribution
-	<div id ="mapC"></div>
-	<script>
-        var mapwidth = 960, mapheight = 700;
-        var projection = d3.geo.equirectangular();
-        var path = d3.geo.path().projection(projection);
-        var svgMapC = d3.select("#mapC").append("svg")
-                      .attr("width", mapwidth).attr("height", mapheight);
-        var gMapC = svgMapC.append("g");
-        var worldObjectC;
-        d3.json("world-50m.json", function(error, world){
-        	worldObjectC = world;
-        	if(error){console.log(error);}
 
-        	var countries = topojson.feature(world, world.objects.countries).features;
-        	countries.forEach(function(country){
-        		gMapC.append("path").attr("d", path(country))
-        		 .style("fill", "#ccc")
-        		 .style("stroke", "#888");
-        	});
-
-             d3.csv("400_C_occ.csv", function(error, csvdata){
-            if(error){
-                console.log(error);
-            }
-
-             var occur = new Array();
-                
-            for(var i = 0; i < csvdata.length; i++){
-                var occur_number = parseInt(csvdata[i].occurences);
-                occur.push(occur_number);
-            }
-            var max_occur = d3.max(occur);
-            var min_occur = d3.min(occur);
-            var radius_scale = d3.scale.linear()
-                .domain([min_occur, max_occur])
-                .range([0, 20]);
-            
-            for(var i = 0; i < csvdata.length; i++){
-                  var lon = csvdata[i].longitude;
-                var lat = csvdata[i].latitude;
-                var occ = csvdata[i].occurences;
-                if(lat == "" || lon == "" || occ == ""){
-                    continue;
-                }
-                var lon_number = parseFloat(lon);
-                var lat_number = parseFloat(lat);
-                var occur_number = parseInt(occ);
-                var radius = radius_scale(occur_number) + 7;
-                var coordiantes = projection([lat_number, lon_number]);
-                gMapC.append("circle").attr("cx", coordiantes[0])
-                    .attr("cy", coordiantes[1])
-                    .attr("r", radius)
-                    .style("fill", "#023F82")
-                    .style("opacity", 0.5);
-            }
-        });
-    });
-
-       
-	</script>
+<h1>Popularity of GitHub Repository Programming Languages from 2012 to 2014</h1>
+<p>
+The chart shows the top ten popular programming languages of GitHub repository from 2012 to 2014. We show the data in the form of percentage to make it easy to follow the trend of each language. 
 </p>
 
-<p> Java distribution
-    <div id ="mapJava"></div>
-    <script>
-        var mapwidth = 960, mapheight = 700;
-        var projection = d3.geo.equirectangular();
-        var path = d3.geo.path().projection(projection);
-        var svgMapJava = d3.select("#mapJava").append("svg")
-                      .attr("width", mapwidth).attr("height", mapheight);
-        var gMapJava = svgMapJava.append("g");
-        var worldObjectJava;
-        d3.json("world-50m.json", function(error, world){
-            worldObjectJava = world;
-            if(error){console.log(error);}
+<svg id="legend" height="90" width="570">
+  <circle cx="10" cy="20" r="5" fill="red"></circle>
+  <circle cx="120" cy="20" r="5" fill="tomato"></circle>
+  <circle cx="230" cy="20" r="5" fill="orange"></circle>
+  <circle cx="340" cy="20" r="5" fill="gold"></circle>
+  <circle cx="450" cy="20" r="5" fill="yellow"></circle>
+  <circle cx="10" cy="50" r="5" fill="lime"></circle>
+  <circle cx="120" cy="50" r="5" fill="green"></circle>
+  <circle cx="230" cy="50" r="5" fill="blue"></circle>
+  <circle cx="340" cy="50" r="5" fill="purple"></circle>
+  <circle cx="450" cy="50" r="5" fill="black"></circle>
 
-            var countries = topojson.feature(world, world.objects.countries).features;
-            countries.forEach(function(country){
-                gMapJava.append("path").attr("d", path(country))
-                 .style("fill", "#ccc")
-                 .style("stroke", "#888");
-            });
+  <text text-anchor="middle" x="60" y="25" fill="black" font-family="Lato">JavaScript</text>
+  <text text-anchor="middle" x="150" y="25" fill="black" font-family="Lato">Java</text>
+  <text text-anchor="middle" x="270" y="25" fill="black" font-family="Lato">Python</text>
+  <text text-anchor="middle" x="371" y="25" fill="black" font-family="Lato">PHP</text>
+  <text text-anchor="middle" x="485" y="25" fill="black" font-family="Lato">Ruby</text>
+  <text text-anchor="middle" x="40" y="55" fill="black" font-family="Lato">C++</text>
+  <text text-anchor="middle" x="140" y="55" fill="black" font-family="Lato">C</text>
+  <text text-anchor="middle" x="257" y="55" fill="black" font-family="Lato">C#</text>
+  <text text-anchor="middle" x="372" y="55" fill="black" font-family="Lato">Shell</text>
+  <text text-anchor="middle" x="508" y="55" fill="black" font-family="Lato">Objective-C</text>
+</svg>
 
-            d3.csv("400_Java_occ.csv", function(error, csvdata){
+<div id="canvas">
+</div>
+
+<script>
+
+var margin = {top: 50, right: 50, bottom: 50, left: 50};
+var width = 1000 - margin.left - margin.right;
+var height = 700 - margin.top - margin.bottom;
+
+var svg = d3.select("#canvas").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var xScale = d3.scale.linear().domain([0, 5]).range([0, width]);
+var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(3).tickValues([2012,2013,2014]);
+
+var yScale = d3.scale.linear().domain([0,20]).range([height, 0]); 
+var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+
+svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+  .append("text")
+  .attr("class", "label")
+  .attr("x", 40)
+  .attr("y", -20)
+  .attr("transform", "rotate(90)")
+  .style("text-anchor", "end")
+  .text("Percentage");
+
+svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis)
+  .append("text")
+  .attr("class", "label")
+  .attr("x", width + 30)
+  .attr("y", -10)
+  .style("text-anchor", "end")
+  .text("Year");
+
+
+d3.csv("percentage.csv", function(error,data) {
+  d3.select("#canvas").append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  data.forEach(function(entry){
+   
+    svg.append("circle")
+      .attr("cx", xScale(parseInt(entry.period)))
+      .attr("cy", yScale(parseFloat(entry.percentage*100))).attr("r", 8).attr("fill", selectColor(entry.repository_language)).attr("opacity", 0.5);
+
+    function getNext(entry) {
+      for (var i = 0; i < data.length; i++) {
+        var str1 = data[i].repository_language;
+        var str2 = entry.repository_language;
+        var period1 = parseInt(data[i].period);
+        var period2 = parseInt(entry.period);
+        if ((str1 == str2) && (period1 == (period2 + 1))) {
+          result = parseFloat(data[i].percentage)*100;
+        }
+      }
+      return result;
+    }
+
+    if (entry.period < 5) {
+      svg.append("line").attr("style", "stroke: "+selectColor(entry.repository_language)+"; stroke-width: 3px; opacity: 0.5;")
+      .attr("x1", xScale(parseInt(entry.period)))
+      .attr("y1", yScale(parseFloat(entry.percentage * 100)))
+      .attr("x2", xScale(parseInt(entry.period) + 1))
+      .attr("y2", yScale(getNext(entry)));
+    }
+    
+  });
+
+});
+
+function selectColor(language) {
+  switch (language) {
+      case "JavaScript":
+          return "red"
+          break;
+      case "Java":
+          return "tomato"
+          break;
+      case "Python":
+          return "orange";
+          break;
+      case "PHP":
+          return "gold";
+          break;
+      case "Ruby":
+          return "yellow"
+          break;
+      case "C++":
+          return "lime";
+          break;
+      case "C":
+          return "green";
+          break;
+      case "C#":
+          return "blue"
+          break;
+      case "Shell":
+          return "purple";
+          break;
+      case "Objective-C":
+          return "black";
+          break;
+    }
+}
+
+</script>
+
+
+<h1> Project 1 - Programming Language Popularity </h1>
+<p> C distribution </p>
+<div id ="mapC"></div>
+<script>
+    var mapwidth = 960, mapheight = 700;
+    var projection = d3.geo.equirectangular();
+    var path = d3.geo.path().projection(projection);
+    var svgMapC = d3.select("#mapC").append("svg")
+                  .attr("width", mapwidth).attr("height", mapheight);
+    var gMapC = svgMapC.append("g");
+    var worldObjectC;
+    d3.json("world-50m.json", function(error, world){
+    	worldObjectC = world;
+    	if(error){console.log(error);}
+
+    	var countries = topojson.feature(world, world.objects.countries).features;
+    	countries.forEach(function(country){
+    		gMapC.append("path").attr("d", path(country))
+    		 .style("fill", "#ccc")
+    		 .style("stroke", "#888");
+    	});
+
+         d3.csv("400_C_occ.csv", function(error, csvdata){
+        if(error){
+            console.log(error);
+        }
+
+         var occur = new Array();
+            
+        for(var i = 0; i < csvdata.length; i++){
+            var occur_number = parseInt(csvdata[i].occurences);
+            occur.push(occur_number);
+        }
+        var max_occur = d3.max(occur);
+        var min_occur = d3.min(occur);
+        var radius_scale = d3.scale.linear()
+            .domain([min_occur, max_occur])
+            .range([0, 20]);
+        
+        for(var i = 0; i < csvdata.length; i++){
+              var lon = csvdata[i].longitude;
+            var lat = csvdata[i].latitude;
+            var occ = csvdata[i].occurences;
+            if(lat == "" || lon == "" || occ == ""){
+                continue;
+            }
+            var lon_number = parseFloat(lon);
+            var lat_number = parseFloat(lat);
+            var occur_number = parseInt(occ);
+            var radius = radius_scale(occur_number) + 7;
+            var coordiantes = projection([lat_number, lon_number]);
+            gMapC.append("circle").attr("cx", coordiantes[0])
+                .attr("cy", coordiantes[1])
+                .attr("r", radius)
+                .style("fill", "#023F82")
+                .style("opacity", 0.5);
+        }
+    });
+});
+</script>
+
+<p> Java distribution</p>
+<div id ="mapJava"></div>
+<script>
+    var mapwidth = 960, mapheight = 700;
+    var projection = d3.geo.equirectangular();
+    var path = d3.geo.path().projection(projection);
+    var svgMapJava = d3.select("#mapJava").append("svg")
+                  .attr("width", mapwidth).attr("height", mapheight);
+    var gMapJava = svgMapJava.append("g");
+    var worldObjectJava;
+    d3.json("world-50m.json", function(error, world){
+        worldObjectJava = world;
+        if(error){console.log(error);}
+
+        var countries = topojson.feature(world, world.objects.countries).features;
+        countries.forEach(function(country){
+            gMapJava.append("path").attr("d", path(country))
+             .style("fill", "#ccc")
+             .style("stroke", "#888");
+        });
+
+        d3.csv("400_Java_occ.csv", function(error, csvdata){
+        if(error){
+            console.log(error);
+        }
+
+         var occur = new Array();
+            
+        for(var i = 0; i < csvdata.length; i++){
+            var occur_number = parseInt(csvdata[i].occurences);
+            occur.push(occur_number);
+        }
+        var max_occur = d3.max(occur);
+        var min_occur = d3.min(occur);
+        var radius_scale = d3.scale.linear()
+            .domain([min_occur, max_occur])
+            .range([0, 20]);
+        
+        for(var i = 0; i < csvdata.length; i++){
+            var lon = csvdata[i].longitude;
+            var lat = csvdata[i].latitude;
+            var occ = csvdata[i].occurences;
+            if(lat == "" || lon == "" || occ == ""){
+                continue;
+            }
+            var lon_number = parseFloat(lon);
+            var lat_number = parseFloat(lat);
+            var occur_number = parseInt(occ);
+            var radius = radius_scale(occur_number) + 7;
+            var coordiantes1 = projection([lat_number, lon_number]);
+            gMapJava.append("circle").attr("cx", coordiantes1[0])
+                .attr("cy", coordiantes1[1])
+                .attr("r", radius)
+                .style("fill", "#023F82")
+                .style("opacity", 0.7);
+        }
+    });
+});  
+</script>
+
+<p> JavaScript distribution</p>
+<div id ="mapJS"></div>
+<script>
+    var mapwidth = 960, mapheight = 700;
+    var projection = d3.geo.equirectangular();
+    var path = d3.geo.path().projection(projection);
+    var svgMapJS = d3.select("#mapJS").append("svg")
+                  .attr("width", mapwidth).attr("height", mapheight);
+    var gMapJS = svgMapJS.append("g");
+    var worldObjectJS;
+    d3.json("world-50m.json", function(error, world){
+        worldObjectJS = world;
+        if(error){console.log(error);}
+
+        var countries = topojson.feature(world, world.objects.countries).features;
+        countries.forEach(function(country){
+            gMapJS.append("path").attr("d", path(country))
+             .style("fill", "#ccc")
+             .style("stroke", "#888");
+        });
+        d3.csv("400_JS_occ.csv", function(error, csvdata){
             if(error){
                 console.log(error);
             }
 
-             var occur = new Array();
-                
+            var occur = new Array();
+            
             for(var i = 0; i < csvdata.length; i++){
                 var occur_number = parseInt(csvdata[i].occurences);
                 occur.push(occur_number);
@@ -119,80 +365,19 @@
                 var lat_number = parseFloat(lat);
                 var occur_number = parseInt(occ);
                 var radius = radius_scale(occur_number) + 7;
-                var coordiantes1 = projection([lat_number, lon_number]);
-                gMapJava.append("circle").attr("cx", coordiantes1[0])
-                    .attr("cy", coordiantes1[1])
+                var coordiantes2 = projection([lat_number, lon_number]);
+                gMapJS.append("circle").attr("cx", coordiantes2[0])
+                    .attr("cy", coordiantes2[1])
                     .attr("r", radius)
                     .style("fill", "#023F82")
                     .style("opacity", 0.7);
-            }
-        });
+        }
     });
+});
 
-       
-    </script>
-</p> JavaScript distribution
-    <div id ="mapJS"></div>
-    <script>
-        var mapwidth = 960, mapheight = 700;
-        var projection = d3.geo.equirectangular();
-        var path = d3.geo.path().projection(projection);
-        var svgMapJS = d3.select("#mapJS").append("svg")
-                      .attr("width", mapwidth).attr("height", mapheight);
-        var gMapJS = svgMapJS.append("g");
-        var worldObjectJS;
-        d3.json("world-50m.json", function(error, world){
-            worldObjectJS = world;
-            if(error){console.log(error);}
+    
+</script>
 
-            var countries = topojson.feature(world, world.objects.countries).features;
-            countries.forEach(function(country){
-                gMapJS.append("path").attr("d", path(country))
-                 .style("fill", "#ccc")
-                 .style("stroke", "#888");
-            });
-            d3.csv("400_JS_occ.csv", function(error, csvdata){
-                if(error){
-                    console.log(error);
-                }
 
-                var occur = new Array();
-                
-                for(var i = 0; i < csvdata.length; i++){
-                    var occur_number = parseInt(csvdata[i].occurences);
-                    occur.push(occur_number);
-                }
-                var max_occur = d3.max(occur);
-                var min_occur = d3.min(occur);
-                var radius_scale = d3.scale.linear()
-                    .domain([min_occur, max_occur])
-                    .range([0, 20]);
-                
-                for(var i = 0; i < csvdata.length; i++){
-                    var lon = csvdata[i].longitude;
-                    var lat = csvdata[i].latitude;
-                    var occ = csvdata[i].occurences;
-                    if(lat == "" || lon == "" || occ == ""){
-                        continue;
-                    }
-                    var lon_number = parseFloat(lon);
-                    var lat_number = parseFloat(lat);
-                    var occur_number = parseInt(occ);
-                    var radius = radius_scale(occur_number) + 7;
-                    var coordiantes2 = projection([lat_number, lon_number]);
-                    gMapJS.append("circle").attr("cx", coordiantes2[0])
-                        .attr("cy", coordiantes2[1])
-                        .attr("r", radius)
-                        .style("fill", "#023F82")
-                        .style("opacity", 0.7);
-            }
-        });
-    });
-
-        
-    </script>
-<p>
-
-</p>
 </body>
 </html>
