@@ -28,23 +28,38 @@
         		 .style("stroke", "#888");
         	});
 
-             d3.csv("C_latlong.csv", function(error, csvdata){
+             d3.csv("400_C_occ.csv", function(error, csvdata){
             if(error){
                 console.log(error);
             }
+
+             var occur = new Array();
+                
+            for(var i = 0; i < csvdata.length; i++){
+                var occur_number = parseInt(csvdata[i].occurences);
+                occur.push(occur_number);
+            }
+            var max_occur = d3.max(occur);
+            var min_occur = d3.min(occur);
+            var radius_scale = d3.scale.linear()
+                .domain([min_occur, max_occur])
+                .range([0, 20]);
             
             for(var i = 0; i < csvdata.length; i++){
-                var lon = csvdata[i].longitude;
+                  var lon = csvdata[i].longitude;
                 var lat = csvdata[i].latitude;
-                if(lat == "" || lon == ""){
+                var occ = csvdata[i].occurences;
+                if(lat == "" || lon == "" || occ == ""){
                     continue;
                 }
                 var lon_number = parseFloat(lon);
                 var lat_number = parseFloat(lat);
-                var coordiantes = projection([lon_number, lat_number]);
+                var occur_number = parseInt(occ);
+                var radius = radius_scale(occur_number) + 7;
+                var coordiantes = projection([lat_number, lon_number]);
                 gMapC.append("circle").attr("cx", coordiantes[0])
                     .attr("cy", coordiantes[1])
-                    .attr("r", 10)
+                    .attr("r", radius)
                     .style("fill", "#023F82")
                     .style("opacity", 0.5);
             }
@@ -76,23 +91,38 @@
                  .style("stroke", "#888");
             });
 
-            d3.csv("JavaLatLong_unsorted.csv", function(error, csvdata){
+            d3.csv("400_Java_occ.csv", function(error, csvdata){
             if(error){
                 console.log(error);
             }
+
+             var occur = new Array();
+                
+            for(var i = 0; i < csvdata.length; i++){
+                var occur_number = parseInt(csvdata[i].occurences);
+                occur.push(occur_number);
+            }
+            var max_occur = d3.max(occur);
+            var min_occur = d3.min(occur);
+            var radius_scale = d3.scale.linear()
+                .domain([min_occur, max_occur])
+                .range([0, 20]);
             
-            for(var i = 0; i < 300; i++){
+            for(var i = 0; i < csvdata.length; i++){
                 var lon = csvdata[i].longitude;
                 var lat = csvdata[i].latitude;
-                if(lat == "" || lon == ""){
+                var occ = csvdata[i].occurences;
+                if(lat == "" || lon == "" || occ == ""){
                     continue;
                 }
                 var lon_number = parseFloat(lon);
                 var lat_number = parseFloat(lat);
-                var coordiantes1 = projection([lon_number, lat_number]);
+                var occur_number = parseInt(occ);
+                var radius = radius_scale(occur_number) + 7;
+                var coordiantes1 = projection([lat_number, lon_number]);
                 gMapJava.append("circle").attr("cx", coordiantes1[0])
                     .attr("cy", coordiantes1[1])
-                    .attr("r", 10)
+                    .attr("r", radius)
                     .style("fill", "#023F82")
                     .style("opacity", 0.7);
             }
@@ -121,7 +151,7 @@
                  .style("fill", "#ccc")
                  .style("stroke", "#888");
             });
-            d3.csv("JSlatlong.csv", function(error, csvdata){
+            d3.csv("400_JS_occ.csv", function(error, csvdata){
                 if(error){
                     console.log(error);
                 }
@@ -149,7 +179,7 @@
                     var lat_number = parseFloat(lat);
                     var occur_number = parseInt(occ);
                     var radius = radius_scale(occur_number) + 7;
-                    var coordiantes2 = projection([lon_number, lat_number]);
+                    var coordiantes2 = projection([lat_number, lon_number]);
                     gMapJS.append("circle").attr("cx", coordiantes2[0])
                         .attr("cy", coordiantes2[1])
                         .attr("r", radius)
