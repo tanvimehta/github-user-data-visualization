@@ -4,20 +4,23 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-
+<link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700|Montserrat|Raleway&effect=canvas-print|stonewash' rel='stylesheet' type='text/css'>
 <style>
 /* put a border around the svg element so we can see the coordinate system better. */
-body { font-family: "Lato"; 
+body { 
+
+font-family: 'Raleway', sans-serif;
 text-align:center;
-margin:20 auto;
+margin:50 auto;
 font-weight: 300;
 background-color: #F5F5F5;
+
 }
 
 .axis{stroke-width:1px;}
 
 h1{font-weight:700;
-  font-size: 16pt;
+  font-size: 24pt;
   margin-bottom: 5pt;
 }
 
@@ -26,7 +29,7 @@ div { margin: 40px; }
 path{
    stroke-width:2;
    fill:transparent;
-   stroke:#666;
+   stroke:#333;
 }
 
 .tick{
@@ -34,16 +37,35 @@ path{
   font-weight:400;
 }
 
-
-#canvas{
-  width:1000px;
+#wrapper {
+  width: 1080px;
   margin: 0 auto;
   background-color:#FFFAFA;
 }
 
+#canvas{
+  width:800px;
+  float: left; 
+}
+
+#legend {
+  width: 200px;
+  float: left;
+  height: 800px;
+}
+
+.clear {
+  clear: both;
+}
+
 p {
   width:800px;
+  font-size: 18px;
   margin: 20px auto;
+}
+
+#mapC, #mapJava, #mapJS {
+  margin: 0 auto;
 }
 
 </style>
@@ -51,52 +73,59 @@ p {
 
 <body>
 
-<h1>Popularity of GitHub Repository Programming Languages from 2012 to 2014</h1>
+<h1 class="font-effect-canvas-print">Popularity of GitHub Repository Programming Languages from 2012 to 2014</h1>
 <p>
 The chart shows the top ten popular programming languages of GitHub repository from 2012 to 2014. We show the data in the form of percentage to make it easy to follow the trend of each language. 
 </p>
 
-<svg id="legend" height="90" width="570">
-  <circle cx="10" cy="20" r="5" fill="red"></circle>
-  <circle cx="120" cy="20" r="5" fill="tomato"></circle>
-  <circle cx="230" cy="20" r="5" fill="orange"></circle>
-  <circle cx="340" cy="20" r="5" fill="gold"></circle>
-  <circle cx="450" cy="20" r="5" fill="yellow"></circle>
-  <circle cx="10" cy="50" r="5" fill="lime"></circle>
-  <circle cx="120" cy="50" r="5" fill="green"></circle>
-  <circle cx="230" cy="50" r="5" fill="blue"></circle>
-  <circle cx="340" cy="50" r="5" fill="purple"></circle>
-  <circle cx="450" cy="50" r="5" fill="black"></circle>
 
-  <text text-anchor="middle" x="60" y="25" fill="black" font-family="Lato">JavaScript</text>
-  <text text-anchor="middle" x="150" y="25" fill="black" font-family="Lato">Java</text>
-  <text text-anchor="middle" x="270" y="25" fill="black" font-family="Lato">Python</text>
-  <text text-anchor="middle" x="371" y="25" fill="black" font-family="Lato">PHP</text>
-  <text text-anchor="middle" x="485" y="25" fill="black" font-family="Lato">Ruby</text>
-  <text text-anchor="middle" x="40" y="55" fill="black" font-family="Lato">C++</text>
-  <text text-anchor="middle" x="140" y="55" fill="black" font-family="Lato">C</text>
-  <text text-anchor="middle" x="257" y="55" fill="black" font-family="Lato">C#</text>
-  <text text-anchor="middle" x="372" y="55" fill="black" font-family="Lato">Shell</text>
-  <text text-anchor="middle" x="508" y="55" fill="black" font-family="Lato">Objective-C</text>
-</svg>
 
-<div id="canvas">
+<div id="wrapper">
+  <div id="canvas"></div>
+  <svg id="legend" height="800" width="200">
+    <circle cx="10" cy="165" r="5" fill="red"></circle>
+    <circle cx="10" cy="390" r="5" fill="tomato"></circle>
+    <circle cx="10" cy="430" r="5" fill="orange"></circle>
+    <circle cx="10" cy="490" r="5" fill="gold"></circle>
+    <circle cx="10" cy="510" r="5" fill="yellow"></circle>
+    <circle cx="10" cy="550" r="5" fill="lime"></circle>
+    <circle cx="10" cy="575" r="5" fill="green"></circle>
+    <circle cx="10" cy="610" r="5" fill="blue"></circle>
+    <circle cx="10" cy="630" r="5" fill="purple"></circle>
+    <circle cx="10" cy="650" r="5" fill="black"></circle>
+
+    <text text-anchor="middle" x="60" y="170" fill="black" font-family="Lato">JavaScript</text>
+    <text text-anchor="middle" x="40" y="395" fill="black" font-family="Lato">Java</text>
+    <text text-anchor="middle" x="50" y="435" fill="black" font-family="Lato">Python</text>
+    <text text-anchor="middle" x="40" y="495" fill="black" font-family="Lato">PHP</text>
+    <text text-anchor="middle" x="42" y="515" fill="black" font-family="Lato">Ruby</text>
+    <text text-anchor="middle" x="40" y="555" fill="black" font-family="Lato">C++</text>
+    <text text-anchor="middle" x="31" y="580" fill="black" font-family="Lato">C</text>
+    <text text-anchor="middle" x="36" y="615" fill="black" font-family="Lato">C#</text>
+    <text text-anchor="middle" x="43" y="635" fill="black" font-family="Lato">Shell</text>
+    <text text-anchor="middle" x="68" y="655" fill="black" font-family="Lato">Objective-C</text>
+  </svg>
+  <div class="clear"></div>
+
 </div>
+
 
 <script>
 
 var margin = {top: 50, right: 50, bottom: 50, left: 50};
-var width = 1000 - margin.left - margin.right;
+var width = 800 - margin.left - margin.right;
 var height = 700 - margin.top - margin.bottom;
 
 var svg = d3.select("#canvas").append("svg")
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", width + margin.left + margin.right + 100)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var xScale = d3.scale.linear().domain([0, 5]).range([0, width]);
-var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(3).tickValues([2012,2013,2014]);
+//var labels = ["2012 Jan-Jun", "2012 Jul-Dec", "2013 Jan-Jun", "2013 Jul-Dec", "2014 Jan-Jun", "2014 Jul-Dec"];
+//var xScale = d3.scale.ordinal().domain(labels).range(labels).rangeRoundBands([0, width]);
+var xScale = d3.scale.linear().domain([0,5]).range([0, width]); 
+var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(6);
 
 var yScale = d3.scale.linear().domain([0,20]).range([height, 0]); 
 var yAxis = d3.svg.axis().scale(yScale).orient("left");
@@ -123,6 +152,7 @@ svg.append("g")
   .attr("y", -10)
   .style("text-anchor", "end")
   .text("Year");
+
 
 
 d3.csv("percentage.csv", function(error,data) {
@@ -200,7 +230,7 @@ function selectColor(language) {
 <p> C distribution </p>
 <div id ="mapC"></div>
 <script>
-    var mapwidth = 960, mapheight = 700;
+    var mapwidth = 960, mapheight = 550;
     var projection = d3.geo.equirectangular();
     var path = d3.geo.path().projection(projection);
     var svgMapC = d3.select("#mapC").append("svg")
@@ -215,7 +245,8 @@ function selectColor(language) {
     	countries.forEach(function(country){
     		gMapC.append("path").attr("d", path(country))
     		 .style("fill", "#ccc")
-    		 .style("stroke", "#888");
+    		 .style("stroke", "#888")
+         .style("stroke-width", 1);
     	});
 
          d3.csv("400_C_occ.csv", function(error, csvdata){
@@ -250,8 +281,8 @@ function selectColor(language) {
             gMapC.append("circle").attr("cx", coordiantes[0])
                 .attr("cy", coordiantes[1])
                 .attr("r", radius)
-                .style("fill", "#023F82")
-                .style("opacity", 0.5);
+                .style("fill", "#0101DF")
+                .style("opacity", 0.6);
         }
     });
 });
@@ -260,7 +291,7 @@ function selectColor(language) {
 <p> Java distribution</p>
 <div id ="mapJava"></div>
 <script>
-    var mapwidth = 960, mapheight = 700;
+    var mapwidth = 960, mapheight = 550;
     var projection = d3.geo.equirectangular();
     var path = d3.geo.path().projection(projection);
     var svgMapJava = d3.select("#mapJava").append("svg")
@@ -275,7 +306,8 @@ function selectColor(language) {
         countries.forEach(function(country){
             gMapJava.append("path").attr("d", path(country))
              .style("fill", "#ccc")
-             .style("stroke", "#888");
+             .style("stroke", "#888")
+             .style("stroke-width", 1);
         });
 
         d3.csv("400_Java_occ.csv", function(error, csvdata){
@@ -310,8 +342,8 @@ function selectColor(language) {
             gMapJava.append("circle").attr("cx", coordiantes1[0])
                 .attr("cy", coordiantes1[1])
                 .attr("r", radius)
-                .style("fill", "#023F82")
-                .style("opacity", 0.7);
+                .style("fill", "#0101DF")
+                .style("opacity", 0.6);
         }
     });
 });  
@@ -320,7 +352,7 @@ function selectColor(language) {
 <p> JavaScript distribution</p>
 <div id ="mapJS"></div>
 <script>
-    var mapwidth = 960, mapheight = 700;
+    var mapwidth = 960, mapheight = 550;
     var projection = d3.geo.equirectangular();
     var path = d3.geo.path().projection(projection);
     var svgMapJS = d3.select("#mapJS").append("svg")
@@ -335,7 +367,8 @@ function selectColor(language) {
         countries.forEach(function(country){
             gMapJS.append("path").attr("d", path(country))
              .style("fill", "#ccc")
-             .style("stroke", "#888");
+             .style("stroke", "#888")
+             .style("stroke-width", 1);
         });
         d3.csv("400_JS_occ.csv", function(error, csvdata){
             if(error){
@@ -369,8 +402,8 @@ function selectColor(language) {
                 gMapJS.append("circle").attr("cx", coordiantes2[0])
                     .attr("cy", coordiantes2[1])
                     .attr("r", radius)
-                    .style("fill", "#023F82")
-                    .style("opacity", 0.7);
+                    .style("fill", "#0101DF")
+                    .style("opacity", 0.6);
         }
     });
 });
