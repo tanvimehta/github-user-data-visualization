@@ -227,126 +227,29 @@ function selectColor(language) {
 
 
 <h1> Project 1 - Programming Language Popularity </h1>
-<p> C distribution </p>
-<div id ="mapC"></div>
+<p> Three languages distribution</p>
+<div id = "map1"></div>
 <script>
-    var mapwidth = 960, mapheight = 550;
-    var projection = d3.geo.equirectangular();
-    var path = d3.geo.path().projection(projection);
-    var svgMapC = d3.select("#mapC").append("svg")
+ var mapwidth = 960, mapheight = 550;
+ var projection = d3.geo.equirectangular();
+ var path = d3.geo.path().projection(projection);
+ var svgMap = d3.select("#map1").append("svg")
                   .attr("width", mapwidth).attr("height", mapheight);
-    var gMapC = svgMapC.append("g");
-    var worldObjectC;
-    d3.json("world-50m.json", function(error, world){
-    	worldObjectC = world;
-    	if(error){console.log(error);}
+ var gMap = svgMap.append("g");
+ var worldObject;
+  d3.json("world-50m.json", function(error, world){
+      worldObject = world;
+      if(error){console.log(error);}
 
-    	var countries = topojson.feature(world, world.objects.countries).features;
-    	countries.forEach(function(country){
-    		gMapC.append("path").attr("d", path(country))
-    		 .style("fill", "#ccc")
-    		 .style("stroke", "#888")
+      var countries = topojson.feature(world, world.objects.countries).features;
+      countries.forEach(function(country){
+        gMap.append("path").attr("d", path(country))
+         .style("fill", "#ccc")
+         .style("stroke", "#888")
          .style("stroke-width", 1);
-    	});
-
-         d3.csv("400_C_occ.csv", function(error, csvdata){
-        if(error){
-            console.log(error);
-        }
-
-         var occur = new Array();
-            
-        for(var i = 0; i < csvdata.length; i++){
-            var occur_number = parseInt(csvdata[i].occurences);
-            occur.push(occur_number);
-        }
-        var max_occur = d3.max(occur);
-        var min_occur = d3.min(occur);
-        var radius_scale = d3.scale.linear()
-            .domain([min_occur, max_occur])
-            .range([0, 20]);
-        
-        for(var i = 0; i < csvdata.length; i++){
-              var lon = csvdata[i].longitude;
-            var lat = csvdata[i].latitude;
-            var occ = csvdata[i].occurences;
-            if(lat == "" || lon == "" || occ == ""){
-                continue;
-            }
-            var lon_number = parseFloat(lon);
-            var lat_number = parseFloat(lat);
-            var occur_number = parseInt(occ);
-            var radius = radius_scale(occur_number) + 7;
-            var coordiantes = projection([lat_number, lon_number]);
-            gMapC.append("circle").attr("cx", coordiantes[0])
-                .attr("cy", coordiantes[1])
-                .attr("r", radius)
-                .style("fill", "#0101DF")
-                .style("opacity", 0.6);
-        }
+      });
     });
-});
-</script>
 
-<p> Java distribution</p>
-<div id ="mapJava"></div>
-<script>
-    var mapwidth = 960, mapheight = 550;
-    var projection = d3.geo.equirectangular();
-    var path = d3.geo.path().projection(projection);
-    var svgMapJava = d3.select("#mapJava").append("svg")
-                  .attr("width", mapwidth).attr("height", mapheight);
-    var gMapJava = svgMapJava.append("g");
-    var worldObjectJava;
-    d3.json("world-50m.json", function(error, world){
-        worldObjectJava = world;
-        if(error){console.log(error);}
-
-        var countries = topojson.feature(world, world.objects.countries).features;
-        countries.forEach(function(country){
-            gMapJava.append("path").attr("d", path(country))
-             .style("fill", "#ccc")
-             .style("stroke", "#888")
-             .style("stroke-width", 1);
-        });
-
-        d3.csv("400_Java_occ.csv", function(error, csvdata){
-        if(error){
-            console.log(error);
-        }
-
-         var occur = new Array();
-            
-        for(var i = 0; i < csvdata.length; i++){
-            var occur_number = parseInt(csvdata[i].occurences);
-            occur.push(occur_number);
-        }
-        var max_occur = d3.max(occur);
-        var min_occur = d3.min(occur);
-        var radius_scale = d3.scale.linear()
-            .domain([min_occur, max_occur])
-            .range([0, 20]);
-        
-        for(var i = 0; i < csvdata.length; i++){
-            var lon = csvdata[i].longitude;
-            var lat = csvdata[i].latitude;
-            var occ = csvdata[i].occurences;
-            if(lat == "" || lon == "" || occ == ""){
-                continue;
-            }
-            var lon_number = parseFloat(lon);
-            var lat_number = parseFloat(lat);
-            var occur_number = parseInt(occ);
-            var radius = radius_scale(occur_number) + 7;
-            var coordiantes1 = projection([lat_number, lon_number]);
-            gMapJava.append("circle").attr("cx", coordiantes1[0])
-                .attr("cy", coordiantes1[1])
-                .attr("r", radius)
-                .style("fill", "#0101DF")
-                .style("opacity", 0.6);
-        }
-    });
-});  
 </script>
 
 <p> JavaScript distribution</p>
@@ -404,12 +307,149 @@ function selectColor(language) {
                     .attr("r", radius)
                     .style("fill", "#0101DF")
                     .style("opacity", 0.6);
+                gMap.append("circle").attr("cx", coordiantes2[0])
+                    .attr("cy", coordiantes2[1])
+                    .attr("r", radius)
+                    .style("fill", "#7570b3")
+                    .style("opacity", 0.6);
         }
     });
 });
-
-    
 </script>
+ <p> Java distribution</p>
+<div id ="mapJava"></div>
+<script>
+    var mapwidth = 960, mapheight = 550;
+    var projection = d3.geo.equirectangular();
+    var path = d3.geo.path().projection(projection);
+    var svgMapJava = d3.select("#mapJava").append("svg")
+                  .attr("width", mapwidth).attr("height", mapheight);
+    var gMapJava = svgMapJava.append("g");
+    var worldObjectJava;
+    d3.json("world-50m.json", function(error, world){
+        worldObjectJava = world;
+        if(error){console.log(error);}
+
+        var countries = topojson.feature(world, world.objects.countries).features;
+        countries.forEach(function(country){
+            gMapJava.append("path").attr("d", path(country))
+             .style("fill", "#ccc")
+             .style("stroke", "#888")
+             .style("stroke-width", 1);
+        });
+
+        d3.csv("400_Java_occ.csv", function(error, csvdata){
+        if(error){
+            console.log(error);
+        }
+
+         var occur = new Array();
+            
+        for(var i = 0; i < csvdata.length; i++){
+            var occur_number = parseInt(csvdata[i].occurences);
+            occur.push(occur_number);
+        }
+        var max_occur = d3.max(occur);
+        var min_occur = d3.min(occur);
+        var radius_scale = d3.scale.linear()
+            .domain([min_occur, max_occur])
+            .range([0, 20]);
+        
+        for(var i = 0; i < csvdata.length; i++){
+            var lon = csvdata[i].longitude;
+            var lat = csvdata[i].latitude;
+            var occ = csvdata[i].occurences;
+            if(lat == "" || lon == "" || occ == ""){
+                continue;
+            }
+            var lon_number = parseFloat(lon);
+            var lat_number = parseFloat(lat);
+            var occur_number = parseInt(occ);
+            var radius = radius_scale(occur_number) + 7;
+            var coordiantes1 = projection([lat_number, lon_number]);
+            gMapJava.append("circle").attr("cx", coordiantes1[0])
+                .attr("cy", coordiantes1[1])
+                .attr("r", radius)
+                .style("fill", "#0101DF")
+                .style("opacity", 0.6);
+            gMap.append("circle").attr("cx", coordiantes1[0])
+                .attr("cy", coordiantes1[1])
+                .attr("r", radius)
+                .style("fill", "#F5AEDA")
+                .style("opacity", 0.6);
+        }
+    });
+});  
+</script>
+    
+
+<p> C distribution </p>
+<div id ="mapC"></div>
+<script>
+    var mapwidth = 960, mapheight = 550;
+    var projection = d3.geo.equirectangular();
+    var path = d3.geo.path().projection(projection);
+    var svgMapC = d3.select("#mapC").append("svg")
+                  .attr("width", mapwidth).attr("height", mapheight);
+    var gMapC = svgMapC.append("g");
+    var worldObjectC;
+    d3.json("world-50m.json", function(error, world){
+      worldObjectC = world;
+      if(error){console.log(error);}
+
+      var countries = topojson.feature(world, world.objects.countries).features;
+      countries.forEach(function(country){
+        gMapC.append("path").attr("d", path(country))
+         .style("fill", "#ccc")
+         .style("stroke", "#888")
+         .style("stroke-width", 1);
+      });
+
+         d3.csv("400_C_occ.csv", function(error, csvdata){
+        if(error){
+            console.log(error);
+        }
+
+         var occur = new Array();
+            
+        for(var i = 0; i < csvdata.length; i++){
+            var occur_number = parseInt(csvdata[i].occurences);
+            occur.push(occur_number);
+        }
+        var max_occur = d3.max(occur);
+        var min_occur = d3.min(occur);
+        var radius_scale = d3.scale.linear()
+            .domain([min_occur, max_occur])
+            .range([0, 20]);
+        
+        for(var i = 0; i < csvdata.length; i++){
+              var lon = csvdata[i].longitude;
+            var lat = csvdata[i].latitude;
+            var occ = csvdata[i].occurences;
+            if(lat == "" || lon == "" || occ == ""){
+                continue;
+            }
+            var lon_number = parseFloat(lon);
+            var lat_number = parseFloat(lat);
+            var occur_number = parseInt(occ);
+            var radius = radius_scale(occur_number) + 7;
+            var coordiantes = projection([lat_number, lon_number]);
+            gMapC.append("circle").attr("cx", coordiantes[0])
+                .attr("cy", coordiantes[1])
+                .attr("r", radius)
+                .style("fill", "#0101DF")
+                .style("opacity", 0.6);
+            gMap.append("circle").attr("cx", coordiantes[0])
+                .attr("cy", coordiantes[1])
+                .attr("r", radius)
+                .style("fill", "#1b9e77")
+                .style("opacity", 0.6);
+        }
+    });
+});
+</script>
+
+
 
 
 </body>
