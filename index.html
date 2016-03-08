@@ -3,31 +3,41 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
-<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700|Montserrat|Raleway&effect=canvas-print|stonewash' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700|Montserrat|Raleway|Lato:&effect=canvas-print|stonewash' rel='stylesheet' type='text/css'>
 <style>
 /* put a border around the svg element so we can see the coordinate system better. */
 body { 
-
-font-family: 'Raleway', sans-serif;
-text-align:center;
-margin:50 auto;
-font-weight: 300;
-background-color: #F5F5F5;
-
-}
-
-.axis{stroke-width:1px;}
-
-h1{font-weight:700;
-  font-size: 24pt;
-  margin-bottom: 5pt;
+  font-family: 'Raleway', sans-serif;
+  margin: 50px auto;
+  text-align: center;
+  background-color: #F5F5F5;
 }
 
 div { margin: 40px; }
 
+.axis{
+  stroke-width:1px;
+}
+
+h1{
+  font-size: 24pt;
+  margin: 50px 0 5px 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+h3 {
+  font-size: 24px;
+  margin: 40px 0 15px 0;
+}
+circle {
+  opacity: 0.6;
+}
 path{
-   stroke-width:2;
+   stroke-width: 2;
    fill:transparent;
    stroke:#333;
 }
@@ -37,7 +47,7 @@ path{
   font-weight:400;
 }
 
-#wrapper {
+.wrapper {
   width: 1080px;
   margin: 0 auto;
   background-color:#FFFAFA;
@@ -59,40 +69,38 @@ path{
 }
 
 p {
-  width:800px;
+  width: 900px;
   font-size: 18px;
-  margin: 20px auto;
+  margin: 30px auto 40px auto;
 }
 
 #mapC, #mapJava, #mapJS {
   margin: 0 auto;
 }
-
 </style>
+
 </head>
 
 <body>
-
 <h1 class="font-effect-canvas-print">Popularity of GitHub Repository Programming Languages from 2012 to 2014</h1>
+
 <p>
 The chart shows the ten most popular programming languages used by GitHub open source repositories from 2012 to 2014. We represent the data in the form of percentage of total open source collaborators to better understand the trend for each language.
 </p>
 
-
-
-<div id="wrapper">
+<div class="wrapper">
   <div id="canvas"></div>
   <svg id="legend" height="800" width="200">
-    <circle cx="10" cy="165" r="5" fill="red"></circle>
-    <circle cx="10" cy="390" r="5" fill="tomato"></circle>
-    <circle cx="10" cy="430" r="5" fill="orange"></circle>
-    <circle cx="10" cy="490" r="5" fill="gold"></circle>
-    <circle cx="10" cy="510" r="5" fill="yellow"></circle>
-    <circle cx="10" cy="550" r="5" fill="lime"></circle>
-    <circle cx="10" cy="575" r="5" fill="green"></circle>
-    <circle cx="10" cy="610" r="5" fill="blue"></circle>
-    <circle cx="10" cy="630" r="5" fill="purple"></circle>
-    <circle cx="10" cy="650" r="5" fill="black"></circle>
+    <circle cx="10" cy="165" r="5" fill="#842DCE"></circle>
+    <circle cx="10" cy="390" r="5" fill="#F87217"></circle>
+    <circle cx="10" cy="430" r="5" fill="#2B65EC"></circle>
+    <circle cx="10" cy="490" r="5" fill="#E4287C"></circle>
+    <circle cx="10" cy="510" r="5" fill="#46C7C7"></circle>
+    <circle cx="10" cy="550" r="5" fill="#C58917"></circle>
+    <circle cx="10" cy="575" r="5" fill="#41A317"></circle>
+    <circle cx="10" cy="610" r="5" fill="#38ACEC"></circle>
+    <circle cx="10" cy="630" r="5" fill="#F75D59"></circle>
+    <circle cx="10" cy="650" r="5" fill="#413839"></circle>
 
     <text text-anchor="middle" x="60" y="170" fill="black" font-family="Lato">JavaScript</text>
     <text text-anchor="middle" x="40" y="395" fill="black" font-family="Lato">Java</text>
@@ -122,10 +130,10 @@ var svg = d3.select("#canvas").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//var labels = ["2012 Jan-Jun", "2012 Jul-Dec", "2013 Jan-Jun", "2013 Jul-Dec", "2014 Jan-Jun", "2014 Jul-Dec"];
-//var xScale = d3.scale.ordinal().domain(labels).range(labels).rangeRoundBands([0, width]);
+var labels = ["2012 Jan-Jun", "2012 Jul-Dec", "2013 Jan-Jun", "2013 Jul-Dec", "2014 Jan-Jun", "2014 Jul-Dec"];
+var xScaleAxis = d3.scale.ordinal().domain(labels).rangeRoundBands([0, width],-1.0);
 var xScale = d3.scale.linear().domain([0,5]).range([0, width]); 
-var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(6);
+var xAxis = d3.svg.axis().scale(xScaleAxis).orient("bottom").ticks(6);
 
 var yScale = d3.scale.linear().domain([0,20]).range([height, 0]); 
 var yAxis = d3.svg.axis().scale(yScale).orient("left");
@@ -136,11 +144,11 @@ svg.append("g")
   .call(yAxis)
   .append("text")
   .attr("class", "label")
-  .attr("x", 40)
+  .attr("x", 90)
   .attr("y", -20)
   .attr("transform", "rotate(90)")
   .style("text-anchor", "end")
-  .text("Percentage");
+  .text("% of Collaborators");
 
 svg.append("g")
   .attr("class", "x axis")
@@ -148,10 +156,10 @@ svg.append("g")
   .call(xAxis)
   .append("text")
   .attr("class", "label")
-  .attr("x", width + 30)
+  .attr("x", width + 40)
   .attr("y", -10)
   .style("text-anchor", "end")
-  .text("Year");
+  .text("Time");
 
 
 
@@ -177,7 +185,7 @@ d3.csv("percentage.csv", function(error,data) {
     }
 
     if (entry.period < 5) {
-      svg.append("line").attr("style", "stroke: "+selectColor(entry.repository_language)+"; stroke-width: 3px; opacity: 0.5;")
+      svg.append("line").attr("style", "stroke: "+selectColor(entry.repository_language)+"; stroke-width: 4px; opacity: 0.5;")
       .attr("x1", xScale(parseInt(entry.period)))
       .attr("y1", yScale(parseFloat(entry.percentage * 100)))
       .attr("x2", xScale(parseInt(entry.period) + 1))
@@ -191,34 +199,34 @@ d3.csv("percentage.csv", function(error,data) {
 function selectColor(language) {
   switch (language) {
       case "JavaScript":
-          return "red"
+          return "#842DCE"
           break;
       case "Java":
-          return "tomato"
+          return "#F87217"
           break;
       case "Python":
-          return "orange";
+          return "#2B65EC";
           break;
       case "PHP":
-          return "gold";
+          return "#E4287C";
           break;
       case "Ruby":
-          return "yellow"
+          return "#46C7C7"
           break;
       case "C++":
-          return "lime";
+          return "#C58917";
           break;
       case "C":
-          return "green";
+          return "#41A317";
           break;
       case "C#":
-          return "blue"
+          return "#38ACEC"
           break;
       case "Shell":
-          return "purple";
+          return "#F75D59";
           break;
       case "Objective-C":
-          return "black";
+          return "#413839";
           break;
     }
 }
@@ -226,34 +234,18 @@ function selectColor(language) {
 </script>
 
 
-<h1> Project 1 - Programming Language Popularity </h1>
-<p> The charts below represent the popularity of 3 programming languages in the year 2014 - JavaScript, Java, C by location. </p>
-<div id = "map1"></div>
-<script>
- var mapwidth = 960, mapheight = 550;
- var projection = d3.geo.equirectangular();
- var path = d3.geo.path().projection(projection);
- var svgMap = d3.select("#map1").append("svg")
-                  .attr("width", mapwidth).attr("height", mapheight);
- var gMap = svgMap.append("g");
- var worldObject;
-  d3.json("world-50m.json", function(error, world){
-      worldObject = world;
-      if(error){console.log(error);}
+<h1 class="font-effect-canvas-print"> Popularity of Programming Language By Location</h1>
+<h2 class="font-effect-stonewash"> The charts below represent the popularity of 3 programming languages in the year 2014 - JavaScript, Java, C by location.</h2>
 
-      var countries = topojson.feature(world, world.objects.countries).features;
-      countries.forEach(function(country){
-        gMap.append("path").attr("d", path(country))
-         .style("fill", "#ccc")
-         .style("stroke", "#888")
-         .style("stroke-width", 1);
-      });
-    });
+<h3 class="font-effect-canvas-print">JavaScript Distribution</h3>
+<p>As seen in the previous chart, we conclude that JavaScript is the most popular programming language within the Github community. The map below suggests that JavaScript is used extensively throughout the world. Although, within the United States, JavaScript is more popular on the East Coast than the West Coast.</p>
 
-</script>
 
-<p> <b>JavaScript distribution</b></br>As seen in the previous chart, we conclude that JavaScript is the most popular programming language within the Github community. The map below suggests that JavaScript is used extensively throughout the world. Although, within the United States, JavaScript is more popular on the East Coast than the West Coast.</p>
-<div id ="mapJS"></div>
+<!-- JavaScript distribution -->
+<div class="wrapper">
+  <div id ="mapJS"></div>
+</div>
+
 <script>
     var mapwidth = 960, mapheight = 550;
     var projection = d3.geo.equirectangular();
@@ -305,19 +297,23 @@ function selectColor(language) {
                 gMapJS.append("circle").attr("cx", coordiantes2[0])
                     .attr("cy", coordiantes2[1])
                     .attr("r", radius)
-                    .style("fill", "#0101DF")
+                    .style("fill", "#842DCE")
                     .style("opacity", 0.6);
-                gMap.append("circle").attr("cx", coordiantes2[0])
-                    .attr("cy", coordiantes2[1])
-                    .attr("r", radius)
-                    .style("fill", "#7570b3")
-                    .style("opacity", 0.6);
+                
         }
     });
 });
 </script>
- <p><b>Java distribution</b></br>Being the second most popular, Java is also used widely throughout the world. The interesting distincion between the usage patterns for JavaScript and Java are seen in United States and South America. While the JavaScript users are concentrated on the coasts, Java users are spread uniformly throughout the United States. Furthermore, Java is seen to be more popular in South America than JavaScript.</p>
-<div id ="mapJava"></div>
+
+
+<!-- Java distribution -->
+<h3 class="font-effect-canvas-print">Java Distribution</h3>
+<p>Being the second most popular, Java is also used widely throughout the world. The interesting distincion between the usage patterns for JavaScript and Java are seen in United States and South America. While the JavaScript users are concentrated on the coasts, Java users are spread uniformly throughout the United States. Furthermore, Java is seen to be more popular in South America than JavaScript.</p>
+
+<div class="wrapper">
+  <div id ="mapJava"></div>
+</div>
+
 <script>
     var mapwidth = 960, mapheight = 550;
     var projection = d3.geo.equirectangular();
@@ -370,21 +366,22 @@ function selectColor(language) {
             gMapJava.append("circle").attr("cx", coordiantes1[0])
                 .attr("cy", coordiantes1[1])
                 .attr("r", radius)
-                .style("fill", "#0101DF")
+                .style("fill", "#F87217")
                 .style("opacity", 0.6);
-            gMap.append("circle").attr("cx", coordiantes1[0])
-                .attr("cy", coordiantes1[1])
-                .attr("r", radius)
-                .style("fill", "#F5AEDA")
-                .style("opacity", 0.6);
+            
         }
     });
 });  
 </script>
     
+<!-- C distribution -->
+<h3 class="font-effect-canvas-print">C Distribution</h3>
+<p>The usage pattern for C suggests that while it is not concentrated in any specific region, it is used still used in small numbers throughout the world.</p>
 
-<p><b>C distribution</b></br>The usage pattern for C suggests that while it is not concentrated in any specific region, it is used still used in small numbers throughout the world.</p>
-<div id ="mapC"></div>
+<div class="wrapper">
+  <div id ="mapC"></div>
+</div>
+
 <script>
     var mapwidth = 960, mapheight = 550;
     var projection = d3.geo.equirectangular();
@@ -437,20 +434,13 @@ function selectColor(language) {
             gMapC.append("circle").attr("cx", coordiantes[0])
                 .attr("cy", coordiantes[1])
                 .attr("r", radius)
-                .style("fill", "#0101DF")
+                .style("fill", "#41A317")
                 .style("opacity", 0.6);
-            gMap.append("circle").attr("cx", coordiantes[0])
-                .attr("cy", coordiantes[1])
-                .attr("r", radius)
-                .style("fill", "#1b9e77")
-                .style("opacity", 0.6);
+             
         }
     });
 });
 </script>
-
-
-
 
 </body>
 </html>
